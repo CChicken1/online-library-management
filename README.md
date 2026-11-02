@@ -1,2 +1,2 @@
-# QTDAPM-Qu-n-L-Th-Vi-n-Tr-c-Tuy-n
+# online-library-management
 xây dựng hệ thống quản lý thư viện trực tuyến

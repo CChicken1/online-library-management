@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Báo cáo — Sổ Mượn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Be+Vietnam+Pro:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+/* ---- Báo cáo: số liệu là chính, biểu đồ vẽ bằng thanh kẻ ---- */
+.chart{margin-bottom:8px}
+.chart-row{display:grid;grid-template-columns:104px minmax(0,1fr) 62px;gap:12px;align-items:center;padding:6px 0}
+.chart-row .cat{font-size:12.5px;color:var(--graphite);text-align:right}
+.chart-row .v{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:12.5px;text-align:right}
+.chart-row .v.alert{color:var(--stamp)}
+.track{height:14px;background:var(--rule);border-radius:1px;position:relative}
+.track i{position:absolute;left:0;top:0;bottom:0;background:var(--ink);border-radius:1px;display:block}
+.track i.late{background:var(--stamp)}
+.chart-axis{display:grid;grid-template-columns:104px minmax(0,1fr) 62px;gap:12px;font-size:11px;color:var(--foxing);border-top:1px solid var(--rule);padding-top:6px;margin-top:4px}
+.chart-axis span:nth-child(2){display:flex;justify-content:space-between}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wordmark">Sổ <b>Mượn</b></div>
+  <div class="brand-sub">Thư viện Trung tâm</div>
+  <label class="search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    Tìm sách, hội viên, phiếu mượn
+    <kbd>/</kbd>
+  </label>
+  <div class="icon-btn" title="Thông báo">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.5 21a2 2 0 0 0 3 0"/></svg>
+  </div>
+  <div class="avatar">TT</div>
+</header>
+
+<div class="shell no-panel">
+
+  <nav class="rail">
+    <a href="dashboard.html">
+      <svg viewBox="0 0 24 24"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v18H5.5A2.5 2.5 0 0 1 3 18.5z"/><path d="M11 3h5.5A2.5 2.5 0 0 1 19 5.5v13a2.5 2.5 0 0 1-2.5 2.5H11"/></svg>
+      Sách
+    </a>
+    <a href="loans.html">
+      <svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/></svg>
+      Mượn &amp; Trả
+    </a>
+    <a href="members.html">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3.2 3.2 0 0 1 0 6.2"/><path d="M17 20a5 5 0 0 0-2-4"/></svg>
+      Hội viên
+    </a>
+    <a href="reports.html" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M3.5 21h17"/><rect x="5" y="11" width="3" height="6"/><rect x="10" y="6" width="3" height="11"/><rect x="15" y="14" width="3" height="3"/></svg>
+      Báo cáo
+    </a>
+    <div class="spacer"></div>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M4 7h9"/><path d="M19 7h1.5"/><path d="M4 17h3.5"/><path d="M13.5 17H20"/><circle cx="15.5" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg>
+      Cài đặt
+    </a>
+  </nav>
+
+  <main class="center">
+    <div class="page-head">
+      <div>
+        <h1 class="display">Báo cáo</h1>
+        <p class="sub">
+          <span>Tháng 11, 2026</span>
+          <span class="rule-sep">Cập nhật lúc 09:41</span>
+        </p>
+      </div>
+      <div class="actions">
+        <select class="select-mini">
+          <option>Tháng 11, 2026</option>
+          <option>Tháng 10, 2026</option>
+          <option>Quý 3, 2026</option>
+        </select>
+        <button class="btn quiet">Xuất CSV</button>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="counts four">
+        <div><span class="n">1.842</span><span class="label">lượt mượn trong tháng</span></div>
+        <div><span class="n">1.769</span><span class="label">lượt trả</span></div>
+        <div><span class="n alert">12</span><span class="label">đang trễ hạn</span></div>
+        <div><span class="n">73</span><span class="label">hội viên mới</span></div>
+      </div>
+    </section>
+
+    <!-- MƯỢN THEO CHỦ ĐỀ -->
+    <section class="section">
+      <div class="section-title">
+        <h2>Lượt mượn theo chủ đề</h2>
+        <span class="line"></span>
+        <span class="count">tháng 11</span>
+      </div>
+      <div class="chart">
+        <div class="chart-row">
+          <span class="cat">Văn học</span>
+          <span class="track"><i style="width:100%"></i></span>
+          <span class="v">712</span>
+        </div>
+        <div class="chart-row">
+          <span class="cat">Lịch sử</span>
+          <span class="track"><i style="width:31%"></i></span>
+          <span class="v">221</span>
+        </div>
+        <div class="chart-row">
+          <span class="cat">Khoa học</span>
+          <span class="track"><i style="width:26%"></i></span>
+          <span class="v">186</span>
+        </div>
+        <div class="chart-row">
+          <span class="cat">Thiếu nhi</span>
+          <span class="track"><i style="width:21%"></i></span>
+          <span class="v">149</span>
+        </div>
+        <div class="chart-row">
+          <span class="cat">Ngoại ngữ</span>
+          <span class="track"><i style="width:17%"></i></span>
+          <span class="v">121</span>
+        </div>
+        <div class="chart-row">
+          <span class="cat">Nghệ thuật</span>
+          <span class="track"><i style="width:11%"></i></span>
+          <span class="v">78</span>
+        </div>
+        <div class="chart-row">
+          <span class="cat">Tôn giáo</span>
+          <span class="track"><i style="width:6%"></i></span>
+          <span class="v">41</span>
+        </div>
+      </div>
+      <div class="chart-axis">
+        <span></span>
+        <span><span>0</span><span>200</span><span>400</span><span>600</span><span>800</span></span>
+        <span></span>
+      </div>
+    </section>
+
+    <!-- TÌNH HÌNH PHIẾU -->
+    <section class="section">
+      <div class="section-title">
+        <h2>Tình hình phiếu mượn</h2>
+        <span class="line"></span>
+        <span class="count">tại thời điểm 15/11</span>
+      </div>
+      <div class="bar" role="img" aria-label="1.769 lượt trả, 1.055 đang mượn đúng hạn, 12 đang trễ hạn">
+        <span class="a" style="width:62.6%"></span>
+        <span class="c" style="width:37.0%"></span>
+        <span class="b" style="width:0.4%"></span>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--ink)"></i>Đã trả, 1.769</span>
+        <span><i style="background:var(--catalogue)"></i>Đang mượn đúng hạn, 1.055</span>
+        <span><i style="background:var(--stamp)"></i>Trễ hạn, 12</span>
+      </div>
+    </section>
+
+    <!-- ĐƯỢC MƯỢN NHIỀU NHẤT -->
+    <section class="section">
+      <div class="section-title">
+        <h2>Được mượn nhiều nhất</h2>
+        <span class="line"></span>
+        <span class="count">tháng 11</span>
+      </div>
+      <div class="rows">
+        <div class="row c3">
+          <span class="no code">2001-A</span>
+          <span class="title">Vườn thu
+            <span class="sub">Nguyễn Ngọc Tư</span>
+          </span>
+          <span class="v code">84 lượt</span>
+        </div>
+        <div class="row c3">
+          <span class="no code">1913-D</span>
+          <span class="title">Nhà giả kim
+            <span class="sub">Paulo Coelho</span>
+          </span>
+          <span class="v code">71 lượt</span>
+        </div>
+        <div class="row c3">
+          <span class="no code">8432-B</span>
+          <span class="title">Bên kia sông
+            <span class="sub">Nguyễn Quang Thiều</span>
+          </span>
+          <span class="v code">63 lượt</span>
+        </div>
+        <div class="row c3">
+          <span class="no code">5120-B</span>
+          <span class="title">Lề thơ
+            <span class="sub">Trần Dần</span>
+          </span>
+          <span class="v code">58 lượt</span>
+        </div>
+        <div class="row c3">
+          <span class="no code">3087-C</span>
+          <span class="title">Cho tôi mượn một lần
+            <span class="sub">Hà Giang</span>
+          </span>
+          <span class="v code">47 lượt</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- THU PHÍ -->
+    <section class="section">
+      <div class="section-title">
+        <h2>Thu phí trễ hạn</h2>
+        <span class="line"></span>
+        <span class="count">tháng 11</span>
+      </div>
+      <div class="counts">
+        <div><span class="n">12,4tr</span><span class="label">đ phạt phát sinh</span></div>
+        <div><span class="n">9,8tr</span><span class="label">đ đã thu</span></div>
+        <div><span class="n alert">2,6tr</span><span class="label">đ chưa thu</span></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

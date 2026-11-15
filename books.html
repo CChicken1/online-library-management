@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kho sách — Sổ Mượn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Be+Vietnam+Pro:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+/* ---- Trang danh sách: dùng lưới 5 cột, số lượng còn lại là dữ liệu chính ---- */
+.stock{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:13px}
+.stock.none{color:var(--stamp)}
+.stock.low{color:var(--foxing)}
+.pager{display:flex;align-items:center;gap:14px;padding-top:14px;font-size:12.5px;color:var(--graphite)}
+.pager .spacer{flex:1}
+.pager a{color:var(--graphite);text-decoration:none;border:1px solid var(--rule);border-radius:2px;padding:4px 10px}
+.pager a:hover{border-color:var(--graphite);color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wordmark">Sổ <b>Mượn</b></div>
+  <div class="brand-sub">Thư viện Trung tâm</div>
+  <label class="search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    Tìm sách, hội viên, phiếu mượn
+    <kbd>/</kbd>
+  </label>
+  <div class="icon-btn" title="Thông báo">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.5 21a2 2 0 0 0 3 0"/></svg>
+  </div>
+  <div class="avatar">TT</div>
+</header>
+
+<div class="shell no-panel">
+
+  <nav class="rail">
+    <a href="dashboard.html" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v18H5.5A2.5 2.5 0 0 1 3 18.5z"/><path d="M11 3h5.5A2.5 2.5 0 0 1 19 5.5v13a2.5 2.5 0 0 1-2.5 2.5H11"/></svg>
+      Sách
+    </a>
+    <a href="loans.html">
+      <svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/></svg>
+      Mượn &amp; Trả
+    </a>
+    <a href="members.html">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3.2 3.2 0 0 1 0 6.2"/><path d="M17 20a5 5 0 0 0-2-4"/></svg>
+      Hội viên
+    </a>
+    <a href="reports.html">
+      <svg viewBox="0 0 24 24"><path d="M3.5 21h17"/><rect x="5" y="11" width="3" height="6"/><rect x="10" y="6" width="3" height="11"/><rect x="15" y="14" width="3" height="3"/></svg>
+      Báo cáo
+    </a>
+    <div class="spacer"></div>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M4 7h9"/><path d="M19 7h1.5"/><path d="M4 17h3.5"/><path d="M13.5 17H20"/><circle cx="15.5" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg>
+      Cài đặt
+    </a>
+  </nav>
+
+  <main class="center">
+    <div class="page-head">
+      <div>
+        <h1 class="display">Kho sách</h1>
+        <p class="sub">
+          <span>1.284 đầu sách</span>
+          <span class="rule-sep">412 tác giả</span>
+          <span class="rule-sep">38 chủ đề</span>
+        </p>
+      </div>
+      <div class="actions">
+        <button class="btn quiet">Nhập từ file</button>
+        <button class="btn">Thêm sách</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <a href="#" aria-current="page">Tất cả</a>
+      <a href="#">Còn trong kho</a>
+      <a href="#">Đang cho mượn</a>
+      <a href="#">Hết bản</a>
+      <a href="#">Cần kiểm kê</a>
+    </div>
+
+    <div class="fieldset">
+      <input type="search" placeholder="Tìm theo tên, ISBN, tác giả" />
+      <select class="select-mini">
+        <option>Mọi chủ đề</option>
+        <option>Văn học</option>
+        <option>Lịch sử</option>
+        <option>Khoa học</option>
+        <option>Thiếu nhi</option>
+        <option>Ngoại ngữ</option>
+      </select>
+      <select class="select-mini">
+        <option>Mọi khoang</option>
+        <option>Khoang 1, tầng 1</option>
+        <option>Khoang 3, tầng 2</option>
+        <option>Khoang 7, tầng 3</option>
+      </select>
+      <button class="btn quiet">Lọc</button>
+      <button class="btn quiet">Bỏ lọc</button>
+    </div>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Đầu sách</h2>
+        <span class="line"></span>
+        <span class="count">1.284 kết quả</span>
+      </div>
+
+      <div class="rows">
+        <div class="row c5">
+          <span class="no code">8432-B</span>
+          <span class="title">Bên kia sông
+            <span class="sub">Nguyễn Quang Thiều</span>
+          </span>
+          <span class="who">Văn học</span>
+          <span class="stock none">0</span>
+          <span class="status late"><i></i>Hết bản</span>
+        </div>
+        <div class="row c5">
+          <span class="no code">1913-D</span>
+          <span class="title">Nhà giả kim
+            <span class="sub">Paulo Coelho</span>
+          </span>
+          <span class="who">Văn học</span>
+          <span class="stock low">1</span>
+          <span class="status late"><i></i>Sắp hết</span>
+        </div>
+        <div class="row c5">
+          <span class="no code">2001-A</span>
+          <span class="title">Vườn thu
+            <span class="sub">Nguyễn Ngọc Tư</span>
+          </span>
+          <span class="who">Văn học</span>
+          <span class="stock">7</span>
+          <span class="status"><i></i>Còn</span>
+        </div>
+        <div class="row c5">
+          <span class="no code">4471-E</span>
+          <span class="title">Chuyện của thiên tài
+            <span class="sub">Hector Malot</span>
+          </span>
+          <span class="who">Thiếu nhi</span>
+          <span class="stock">3</span>
+          <span class="status"><i></i>Còn</span>
+        </div>
+        <div class="row c5">
+          <span class="no code">1556-C</span>
+          <span class="title">Sơn Tặng
+            <span class="sub">Vũ Hoàng Chương</span>
+          </span>
+          <span class="who">Văn học</span>
+          <span class="stock">2</span>
+          <span class="status"><i></i>Còn</span>
+        </div>
+        <div class="row c5">
+          <span class="no code">7412-F</span>
+          <span class="title">Tôi thấy hoa vàng trên cỏ xanh
+            <span class="sub">Nguyễn Ngọc Tư</span>
+          </span>
+          <span class="who">Văn học</span>
+          <span class="stock">4</span>
+          <span class="status"><i></i>Còn</span>
+        </div>
+        <div class="row c5">
+          <span class="no code">5120-B</span>
+          <span class="title">Lề thơ
+            <span class="sub">Trần Dần</span>
+          </span>
+          <span class="who">Văn học</span>
+          <span class="stock">6</span>
+          <span class="status"><i></i>Còn</span>
+        </div>
+        <div class="row c5">
+          <span class="no code">6308-A</span>
+          <span class="title">Đại vệ chí dịch
+            <span class="sub">Hà Giang</span>
+          </span>
+          <span class="who">Lịch sử</span>
+          <span class="stock">5</span>
+          <span class="status"><i></i>Còn</span>
+        </div>
+        <div class="row c5">
+          <span class="no code">3087-C</span>
+          <span class="title">Cho tôi mượn một lần
+            <span class="sub">Hà Giang</span>
+          </span>
+          <span class="who">Văn học</span>
+          <span class="stock low">1</span>
+          <span class="status late"><i></i>Sắp hết</span>
+        </div>
+        <div class="row c5">
+          <span class="no code">9215-D</span>
+          <span class="title">Tắt đèn
+            <span class="sub">Nguyễn Quang Thiều</span>
+          </span>
+          <span class="who">Văn học</span>
+          <span class="stock">9</span>
+          <span class="status"><i></i>Còn</span>
+        </div>
+      </div>
+
+      <div class="pager">
+        <span>1–10 trong 1.284</span>
+        <span class="spacer"></span>
+        <a href="#">Trước</a>
+        <a href="#">Sau</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

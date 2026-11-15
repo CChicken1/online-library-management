@@ -279,6 +279,239 @@ code.code {
 }
 
 /* ==========================================================================
+   Đăng nhập / đăng ký
+   ========================================================================== */
+
+.auth {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--color-ink);
+  padding: 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--color-stock);
+  border: 1px solid var(--color-rule);
+  border-radius: 2px;
+  padding: 32px 30px 26px;
+}
+
+.wordmark.dark {
+  color: var(--color-ink);
+  font-size: 24px;
+}
+
+.wordmark.dark b {
+  color: var(--color-catalogue);
+  font-weight: 500;
+}
+
+.auth-sub {
+  font-size: 13px;
+  color: var(--color-graphite);
+  margin: 4px 0 24px;
+}
+
+.auth-card form {
+  display: grid;
+  gap: 2px;
+}
+
+.auth-alt {
+  font-size: 12.5px;
+  color: var(--color-graphite);
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-rule);
+}
+
+.auth-alt a {
+  color: var(--color-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-graphite);
+}
+
+.form-error {
+  font-size: 12.5px;
+  color: var(--color-stamp);
+  background: #fbf0ed;
+  border: 1px solid var(--color-stamp);
+  border-radius: 2px;
+  padding: 8px 11px;
+  margin: 4px 0 12px;
+}
+
+.form-error.is-inline {
+  margin: 0;
+  display: inline-block;
+}
+
+.hint.is-error { color: var(--color-stamp); }
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   Biểu mẫu hội viên
+   ========================================================================== */
+
+.form-card {
+  background: var(--color-stock);
+  border: 1px solid var(--color-rule);
+  border-radius: 2px;
+  padding: 24px;
+  max-width: 640px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   Thao tác trong bảng
+   ========================================================================== */
+
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.status.is-ok-inline {
+  color: var(--color-catalogue);
+  gap: 4px;
+}
+
+.inline-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.confirm {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 30;
+  background: var(--color-stock);
+  border: 1px solid var(--color-ink);
+  border-radius: 2px;
+  padding: 12px 14px;
+  min-width: 250px;
+  box-shadow: 0 4px 14px rgba(23, 33, 44, 0.12);
+}
+
+.confirm p {
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.copy-picker {
+  margin-top: 16px;
+}
+
+.copy-picker h3 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.copy-grid {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.copy-chip {
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  padding: 5px 11px;
+  border: 1px solid var(--color-rule);
+  border-radius: 2px;
+  background: var(--color-stock);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.copy-chip:hover:not(:disabled) { border-color: var(--color-ink); }
+
+.copy-chip.is-on {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-stock);
+}
+
+.copy-chip:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.fine-summary {
+  border-top: 1px solid var(--color-rule);
+  padding-top: 10px;
+  display: grid;
+  gap: 2px;
+}
+
+.fine-summary .num {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.fine-summary .m {
+  font-size: 12.5px;
+  color: var(--color-graphite);
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.user-name {
+  font-size: 12.5px;
+  color: #b6c3cd;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pager .is-off {
+  opacity: 0.4;
+}
+
+/* ==========================================================================
    Báo cáo
    ========================================================================== */
 
@@ -1231,7 +1464,10 @@ code.code {
   .shell {
     grid-template-columns: 76px minmax(0, 1fr);
   }
-  .slip { display: none; }
+  /* Chỉ ẩn panel cạnh của trang chủ (con trực tiếp của .shell).
+     Phiếu mượn nằm trong .center và phải luôn hiện, nếu không nút
+     "Giao sách và tạo phiếu" sẽ biến mất khỏi màn hình. */
+  .shell > .slip { display: none; }
   .center { padding: 26px 28px 60px; }
 }
 

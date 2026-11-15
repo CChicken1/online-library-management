@@ -5,21 +5,21 @@ import "./globals.css";
 const newsreader = Newsreader({
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "600"],
-  variable: "--font-display",
+  variable: "--fd",
   display: "swap",
 });
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-sans",
+  variable: "--fs",
   display: "swap",
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500"],
-  variable: "--font-mono",
+  variable: "--fm",
   display: "swap",
 });
 

@@ -1,170 +1,202 @@
-"use client";
-
-import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Search } from "lucide-react";
-import { PageHead, Row, Rows, SectionTitle, Status, Tabs } from "@/components/ui";
-import { Rail, Topbar } from "@/components/shell";
-import {
-  FINE_PER_DAY,
-  books,
-  daysLate,
-  formatDate,
-  formatVNDFull,
-  getBook,
-  getMember,
-  loans,
-} from "@/lib/data";
+import { AppShell } from "@/components/app-shell";
+import { PageHead, Row, Rows, SectionTitle, Status } from "@/components/ui";
+import { RenewButton, ReturnButton } from "@/components/loan-actions";
+import { getSettings, listLoans, listMembers } from "@/lib/api";
+import { daysLate, daysLeft, formatDate, formatVNDFull, todayISO } from "@/lib/types";
 
-type Filter = "active" | "overdue" | "returned";
+export default async function LoansPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; tab?: string }>;
+}) {
+  const sp = await searchParams;
+  const q = (sp.q ?? "").trim().toLowerCase();
+  const tab = sp.tab ?? "active";
+  const today = todayISO();
 
-export default function LoansPage() {
-  const [filter, setFilter] = useState<Filter>("active");
-  const [q, setQ] = useState("");
+  const [loans, members, settings] = await Promise.all([
+    listLoans(today),
+    listMembers(),
+    getSettings(),
+  ]);
+
+  const memberById = new Map(members.map((m) => [m.id, m]));
+  const bookTitle = new Map<string, string>();
+  {
+    const { listBooks } = await import("@/lib/api");
+    const books = await listBooks();
+    for (const b of books) bookTitle.set(b.id, b.title);
+  }
 
   const active = loans.filter((l) => !l.returnedAt);
   const overdue = active.filter((l) => l.status === "overdue");
+  const returned = loans.filter((l) => l.returnedAt);
 
-  const returned = loans.slice(0, 0); // dữ liệu trả sách sẽ nạp khi có API
+  let list =
+    tab === "overdue" ? overdue : tab === "returned" ? returned : active;
 
-  const list = useMemo(() => {
-    const source =
-      filter === "active" ? active : filter === "overdue" ? overdue : returned;
-    const needle = q.trim().toLowerCase();
-    if (!needle) return source;
-    return source.filter((l) => {
-      const book = getBook(l.bookId);
-      const member = getMember(l.memberId);
+  if (q) {
+    list = list.filter((l) => {
+      const member = memberById.get(l.memberId);
       return (
-        l.id.toLowerCase().includes(needle) ||
-        book?.title.toLowerCase().includes(needle) ||
-        member?.name.toLowerCase().includes(needle)
+        l.receiptCode.toLowerCase().includes(q) ||
+        (bookTitle.get(l.bookId) ?? "").toLowerCase().includes(q) ||
+        (member?.name ?? "").toLowerCase().includes(q) ||
+        (member?.code ?? "").includes(q)
       );
     });
-  }, [filter, q, active, overdue, returned]);
+  }
+
+  const dueSoon = active.filter((l) => {
+    const d = daysLeft(l.dueAt, today);
+    return d >= 0 && d <= 3;
+  });
+
+  const tabLink = (key: string) => {
+    const params = new URLSearchParams();
+    if (sp.q) params.set("q", sp.q);
+    if (key !== "active") params.set("tab", key);
+    const s = params.toString();
+    return s ? `/loans?${s}` : "/loans";
+  };
 
   return (
-    <>
-      <Topbar />
-      <div className="shell no-panel">
-        <Rail />
-        <main className="center">
-          <PageHead
-            title="Mượn & Trả"
-            meta={`${active.length} phiếu đang mở, ${overdue.length} quá hạn`}
-            actions={
-              <>
-                <button className="btn btn-quiet">Nhập trả tại chỗ</button>
-                <Link className="btn" href="/loans/issue">
-                  Tạo phiếu mượn
-                </Link>
-              </>
-            }
-          />
+    <AppShell>
+      <PageHead
+        title="Mượn & Trả"
+        meta={`${active.length} phiếu đang mở, ${overdue.length} quá hạn`}
+        actions={
+          <>
+            <Link className="btn btn-quiet" href="/loans?tab=returned">
+              Nhập trả tại chỗ
+            </Link>
+            <Link className="btn" href="/loans/issue">
+              Tạo phiếu mượn
+            </Link>
+          </>
+        }
+      />
 
-          <Tabs
-            items={[
-              { key: "active", label: "Đang mượn", count: active.length, active: filter === "active" },
-              { key: "overdue", label: "Quá hạn", count: overdue.length, active: filter === "overdue" },
-              { key: "returned", label: "Đã trả", active: filter === "returned" },
-            ]}
-            onChange={(k) => setFilter(k as Filter)}
-          />
-
-          <div className="fieldset">
-            <label className="search-inline">
-              <Search size={14} strokeWidth={2} aria-hidden />
-              <input
-                type="search"
-                placeholder="Mã phiếu, tên sách, hội viên"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                aria-label="Tìm phiếu mượn"
-              />
-            </label>
-          </div>
-
-          <section className="section">
-            <SectionTitle count={`${list.length} phiếu`}>
-              {filter === "active"
-                ? "Phiếu đang mở"
-                : filter === "overdue"
-                  ? "Phiếu quá hạn"
-                  : "Phiếu đã trả"}
-            </SectionTitle>
-
-            {list.length === 0 ? (
-              <p className="muted">
-                {filter === "returned"
-                  ? "Chưa có phiếu trả nào trong bộ dữ liệu hiện tại."
-                  : "Không có phiếu nào khớp bộ lọc."}
-              </p>
-            ) : (
-              <Rows>
-                {list.map((l) => {
-                  const book = getBook(l.bookId);
-                  const member = getMember(l.memberId);
-                  const late = l.status === "overdue";
-                  const d = daysLate(l.dueAt);
-                  return (
-                    <Row key={l.id} className="loan">
-                      <span className="no code">{l.id}</span>
-                      <div>
-                        <Link href={`/books/${l.bookId}`} className="title link">
-                          {book?.title}
-                        </Link>
-                        <span className="sub">
-                          {member?.name}, bản {l.copyLabel}
-                        </span>
-                      </div>
-                      <span className="who code">
-                        Hạn {formatDate(l.dueAt)}
-                        {late ? (
-                          <span className="sub late-sub">
-                            trễ {d} ngày, {formatVNDFull(d * FINE_PER_DAY)}
-                          </span>
-                        ) : null}
-                      </span>
-                      <span className="who code">{member?.code}</span>
-                      <Status tone={late ? "late" : "neutral"}>
-                        {late ? "Quá hạn" : "Còn hạn"}
-                      </Status>
-                    </Row>
-                  );
-                })}
-              </Rows>
-            )}
-          </section>
-
-          <section className="section">
-            <SectionTitle>Đến hạn trong 3 ngày tới</SectionTitle>
-            <Rows>
-              {active
-                .filter((l) => {
-                  const diff =
-                    (new Date(l.dueAt).getTime() - new Date("2026-11-15").getTime()) /
-                    86_400_000;
-                  return diff >= 0 && diff <= 3;
-                })
-                .map((l) => {
-                  const book = getBook(l.bookId);
-                  const member = getMember(l.memberId);
-                  return (
-                    <Row key={l.id} className="c4">
-                      <span className="no code">{l.copyLabel}</span>
-                      <div>
-                        <span className="title">{book?.title}</span>
-                        <span className="sub">{member?.name}</span>
-                      </div>
-                      <span className="who code">{formatDate(l.dueAt)}</span>
-                      <Status tone="neutral">Sắp đến hạn</Status>
-                    </Row>
-                  );
-                })}
-            </Rows>
-          </section>
-        </main>
+      <div className="tabs" role="tablist">
+        {(
+          [
+            ["active", "Đang mượn", active.length],
+            ["overdue", "Quá hạn", overdue.length],
+            ["returned", "Đã trả", returned.length],
+          ] as [string, string, number][]
+        ).map(([key, label, count]) => (
+          <Link
+            key={key}
+            href={tabLink(key)}
+            role="tab"
+            aria-selected={tab === key}
+            className="tab-btn"
+          >
+            {label}
+            <span className="tab-count">{count}</span>
+          </Link>
+        ))}
       </div>
-    </>
+
+      <form className="fieldset" method="get">
+        {tab !== "active" ? <input type="hidden" name="tab" value={tab} /> : null}
+        <label className="search-inline">
+          <input
+            type="search"
+            name="q"
+            placeholder="Mã phiếu, tên sách, hội viên"
+            defaultValue={sp.q ?? ""}
+            aria-label="Tìm phiếu mượn"
+          />
+        </label>
+        <button className="btn btn-quiet" type="submit">
+          Tìm
+        </button>
+        <span className="filter-count">{list.length} phiếu</span>
+      </form>
+
+      <section className="section">
+        <SectionTitle count={`${list.length} phiếu`}>
+          {tab === "active"
+            ? "Phiếu đang mở"
+            : tab === "overdue"
+              ? "Phiếu quá hạn"
+              : "Phiếu đã trả"}
+        </SectionTitle>
+
+        {list.length === 0 ? (
+          <p className="muted">
+            {tab === "returned"
+              ? "Chưa có phiếu trả nào trong bộ dữ liệu hiện tại."
+              : "Không có phiếu nào khớp bộ lọc."}
+          </p>
+        ) : (
+          <Rows>
+            {list.map((l) => {
+              const member = memberById.get(l.memberId);
+              const late = l.status === "overdue";
+              const d = daysLate(l.dueAt, today);
+              return (
+                <Row key={l.id} className="loan">
+                  <span className="no code">{l.receiptCode}</span>
+                  <div>
+                    <Link href={`/books/${l.bookId}`} className="title link">
+                      {bookTitle.get(l.bookId)}
+                    </Link>
+                    <span className="sub">
+                      {member?.name}, bản {l.copyLabel}
+                    </span>
+                  </div>
+                  <span className="who code">
+                    Hạn {formatDate(l.dueAt)}
+                    {late ? (
+                      <span className="sub late-sub">
+                        trễ {d} ngày, {formatVNDFull(d * settings.finePerDay)}
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="who code">{member?.code}</span>
+                  <div className="row-actions">
+                    {l.returnedAt ? (
+                      <Status tone="neutral">Đã trả</Status>
+                    ) : (
+                      <>
+                        <Status tone={late ? "late" : "neutral"}>
+                          {late ? "Quá hạn" : "Còn hạn"}
+                        </Status>
+                        {!late ? <RenewButton loanId={l.id} /> : null}
+                        <ReturnButton loanId={l.id} receiptCode={l.receiptCode} />
+                      </>
+                    )}
+                  </div>
+                </Row>
+              );
+            })}
+          </Rows>
+        )}
+      </section>
+
+      {tab === "active" && dueSoon.length > 0 ? (
+        <section className="section">
+          <SectionTitle count={`${dueSoon.length} phiếu`}>
+            Đến hạn trong 3 ngày tới
+          </SectionTitle>
+          <Rows>
+            {dueSoon.map((l) => (
+              <Row key={l.id} className="c4">
+                <span className="no code">{l.copyLabel}</span>
+                <div>
+                  <span className="title">{bookTitle.get(l.bookId)}</span>
+                  <span className="sub">{memberById.get(l.memberId)?.name}</span>
+                </div>
+                <span className="who code">{formatDate(l.dueAt)}</span>
+                <Status tone="neutral">Sắp đến hạn</Status>
+              </Row>
+            ))}
+          </Rows>
+        </section>
+      ) : null}
+    </AppShell>
   );
 }

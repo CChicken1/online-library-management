@@ -1,178 +1,178 @@
-"use client";
-
-import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { AppShell } from "@/components/app-shell";
 import { PageHead, Row, Rows, SectionTitle, Status } from "@/components/ui";
-import { Rail, Topbar } from "@/components/shell";
-import { SUBJECTS, books, loans } from "@/lib/data";
+import { listBooks, listLoans, listShelves, listSubjects } from "@/lib/api";
+import { formatDate } from "@/lib/types";
 
-const PER_PAGE = 6;
+const PER_PAGE = 8;
 
-export default function BooksPage() {
-  const [q, setQ] = useState("");
-  const [subject, setSubject] = useState<string>("all");
-  const [shelf, setShelf] = useState<string>("all");
-  const [page, setPage] = useState(1);
+export default async function BooksPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; subject?: string; shelf?: string; page?: string }>;
+}) {
+  const sp = await searchParams;
+  const q = sp.q ?? "";
+  const subject = sp.subject ?? "all";
+  const shelf = sp.shelf ?? "all";
+  const page = Math.max(1, Number(sp.page ?? "1") || 1);
 
-  const filtered = useMemo(() => {
-    const needle = q.trim().toLowerCase();
-    return books.filter((b) => {
-      if (subject !== "all" && b.subject !== subject) return false;
-      if (shelf !== "all" && b.shelf !== shelf) return false;
-      if (!needle) return true;
-      return (
-        b.title.toLowerCase().includes(needle) ||
-        b.author.toLowerCase().includes(needle) ||
-        b.code.toLowerCase().includes(needle)
-      );
-    });
-  }, [q, subject, shelf]);
+  const [books, loans, subjects, shelves] = await Promise.all([
+    listBooks({ search: q, subject, shelf }),
+    listLoans(),
+    listSubjects(),
+    listShelves(),
+  ]);
 
-  const pages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  const pages = Math.max(1, Math.ceil(books.length / PER_PAGE));
   const safePage = Math.min(page, pages);
-  const slice = filtered.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
+  const slice = books.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
 
-  const shelves = Array.from(new Set(books.map((b) => b.shelf)));
+  const onLoanByBook = new Map<string, number>();
+  for (const l of loans) {
+    if (!l.returnedAt) {
+      onLoanByBook.set(l.bookId, (onLoanByBook.get(l.bookId) ?? 0) + 1);
+    }
+  }
+
+  /** Dựng link giữ nguyên các bộ lọc khác. */
+  const link = (patch: Record<string, string | undefined>) => {
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    if (subject !== "all") params.set("subject", subject);
+    if (shelf !== "all") params.set("shelf", shelf);
+    for (const [k, v] of Object.entries(patch)) {
+      if (v) params.set(k, v);
+      else params.delete(k);
+    }
+    const s = params.toString();
+    return s ? `/books?${s}` : "/books";
+  };
 
   return (
-    <>
-      <Topbar />
-      <div className="shell no-panel">
-        <Rail />
-        <main className="center">
-          <PageHead
-            title="Kho sách"
-            meta={`${filtered.length} cuốn trong ${books.length} mã sách`}
-            actions={
-              <>
-                <button className="btn btn-quiet">Nhập sách mới</button>
-                <button className="btn">Xuất danh mục</button>
-              </>
-            }
+    <AppShell>
+      <PageHead
+        title="Kho sách"
+        meta={`${books.length} đầu sách khớp bộ lọc`}
+        actions={
+          <>
+            <Link className="btn btn-quiet" href="/books">
+              Nhập sách mới
+            </Link>
+            <button className="btn">Xuất danh mục</button>
+          </>
+        }
+      />
+
+      <form className="fieldset" method="get">
+        <label className="search-inline">
+          <input
+            type="search"
+            name="q"
+            placeholder="Tên sách, tác giả, mã sách"
+            defaultValue={q}
+            aria-label="Tìm trong kho sách"
           />
+        </label>
 
-          <div className="fieldset">
-            <label className="search-inline">
-              <Search size={14} strokeWidth={2} aria-hidden />
-              <input
-                type="search"
-                placeholder="Tên sách, tác giả, mã sách"
-                value={q}
-                onChange={(e) => {
-                  setQ(e.target.value);
-                  setPage(1);
-                }}
-                aria-label="Tìm trong kho sách"
-              />
-            </label>
-            <select
-              className="select-mini"
-              value={subject}
-              onChange={(e) => {
-                setSubject(e.target.value);
-                setPage(1);
-              }}
-              aria-label="Lọc theo chủ đề"
-            >
-              <option value="all">Mọi chủ đề</option>
-              {SUBJECTS.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-            <select
-              className="select-mini"
-              value={shelf}
-              onChange={(e) => {
-                setShelf(e.target.value);
-                setPage(1);
-              }}
-              aria-label="Lọc theo khoang kệ"
-            >
-              <option value="all">Mọi khoang kệ</option>
-              {shelves.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-            <span className="filter-count">
-              {filtered.length} kết quả
-            </span>
-          </div>
+        <select
+          className="select-mini"
+          name="subject"
+          defaultValue={subject}
+          aria-label="Lọc theo chủ đề"
+        >
+          <option value="all">Mọi chủ đề</option>
+          {subjects.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
 
-          <section className="section">
-            <SectionTitle>Danh mục</SectionTitle>
-            <Rows>
-              {slice.map((b) => {
-                const onLoan = loans.filter(
-                  (l) => l.bookId === b.id && !l.returnedAt,
-                ).length;
-                const state =
-                  b.available === 0
-                    ? ("late" as const)
-                    : b.available < b.copies
-                      ? ("neutral" as const)
-                      : ("ok" as const);
-                return (
-                  <Row key={b.id} className="c5">
-                    <span className="no code">{b.code}</span>
-                    <div>
-                      <Link href={`/books/${b.id}`} className="title link">
-                        {b.title}
-                      </Link>
-                      <span className="sub">
-                        {b.author}, {b.year}, {b.subject}
-                      </span>
-                    </div>
-                    <span className="who">{b.shelf}</span>
-                    <span className="num">
-                      {b.available}
-                      <span className="of"> / {b.copies}</span>
+        <select
+          className="select-mini"
+          name="shelf"
+          defaultValue={shelf}
+          aria-label="Lọc theo khoang kệ"
+        >
+          <option value="all">Mọi khoang kệ</option>
+          {shelves.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+
+        <button className="btn btn-quiet" type="submit">
+          Lọc
+        </button>
+        <span className="filter-count">{books.length} kết quả</span>
+      </form>
+
+      <section className="section">
+        <SectionTitle>Danh mục</SectionTitle>
+
+        {books.length === 0 ? (
+          <p className="muted">
+            Không có cuốn nào khớp bộ lọc. Xoá từ khoá để xem lại toàn bộ kho.
+          </p>
+        ) : (
+          <Rows>
+            {slice.map((b) => {
+              const onLoan = onLoanByBook.get(b.id) ?? 0;
+              const state =
+                b.available === 0
+                  ? ("late" as const)
+                  : b.available < b.copies
+                    ? ("neutral" as const)
+                    : ("ok" as const);
+              return (
+                <Row key={b.id} className="c5">
+                  <span className="no code">{b.code}</span>
+                  <div>
+                    <Link href={`/books/${b.id}`} className="title link">
+                      {b.title}
+                    </Link>
+                    <span className="sub">
+                      {b.author}
+                      {b.year ? `, ${b.year}` : ""}, {b.subject}
                     </span>
-                    <Status tone={state}>
-                      {b.available === 0
-                        ? "Hết bản"
-                        : b.available < b.copies
-                          ? `Còn ${b.available}, đang mượn ${onLoan}`
-                          : "Sẵn có"}
-                    </Status>
-                  </Row>
-                );
-              })}
-            </Rows>
+                  </div>
+                  <span className="who">{b.shelf}</span>
+                  <span className="num">
+                    {b.available}
+                    <span className="of"> / {b.copies}</span>
+                  </span>
+                  <Status tone={state}>
+                    {b.available === 0
+                      ? "Hết bản"
+                      : b.available < b.copies
+                        ? `Còn ${b.available}, đang mượn ${onLoan}`
+                        : "Sẵn có"}
+                  </Status>
+                </Row>
+              );
+            })}
+          </Rows>
+        )}
 
-            {filtered.length === 0 ? (
-              <p className="filter-count" style={{ padding: "18px 2px" }}>
-                Không có cuốn nào khớp bộ lọc. Xoá từ khoá để xem lại toàn bộ kho.
-              </p>
-            ) : null}
-
-            <div className="pager">
-              <span className="code">
-                Trang {safePage} / {pages}
-              </span>
-              <span className="spacer" />
-              <button
-                className="btn btn-quiet"
-                onClick={() => setPage(Math.max(1, safePage - 1))}
-                disabled={safePage === 1}
-              >
-                Trước
-              </button>
-              <button
-                className="btn btn-quiet"
-                onClick={() => setPage(Math.min(pages, safePage + 1))}
-                disabled={safePage === pages}
-              >
-                Sau
-              </button>
-            </div>
-          </section>
-        </main>
-      </div>
-    </>
+        <div className="pager">
+          <span className="code">
+            Trang {safePage} / {pages}
+          </span>
+          <span className="spacer" />
+          {safePage > 1 ? (
+            <Link href={link({ page: String(safePage - 1) })}>Trước</Link>
+          ) : (
+            <span className="is-off">Trước</span>
+          )}
+          {safePage < pages ? (
+            <Link href={link({ page: String(safePage + 1) })}>Sau</Link>
+          ) : (
+            <span className="is-off">Sau</span>
+          )}
+        </div>
+      </section>
+    </AppShell>
   );
 }

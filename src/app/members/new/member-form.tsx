@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useFormStatus } from "react-dom";
 import { Check } from "lucide-react";
 import { createMemberAction } from "@/app/actions";
-import { EMPTY_RESULT } from "@/app/actions";
-import type { ActionResult } from "@/app/actions";
+import { EMPTY_RESULT } from "@/lib/action-result";
+import type { ActionResult } from "@/lib/action-result";
 
 export function MemberForm() {
   const [state, formAction] = useActionState<ActionResult, FormData>(

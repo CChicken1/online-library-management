@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
 import { signUpAction } from "@/app/actions";
-import { EMPTY_RESULT } from "@/app/actions";
+import { EMPTY_RESULT } from "@/lib/action-result";
 
 function SubmitButton() {
   const { pending } = useFormStatus();

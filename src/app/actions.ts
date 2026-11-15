@@ -12,21 +12,13 @@ import {
   updateMember,
 } from "@/lib/api";
 import type { MemberInput } from "@/lib/api";
+import type { ActionResult } from "@/lib/action-result";
 
 /* ==========================================================================
    Server Actions.
    Mọi thao tác ghi dữ liệu đi qua đây, để giao diện chỉ gọi hàm và
    không phải tự quản lý Supabase client.
    ========================================================================== */
-
-export type ActionResult = {
-  ok: boolean;
-  message: string;
-  fieldErrors?: Record<string, string>;
-};
-
-/** Trạng thái rỗng dùng làm giá trị ban đầu cho useActionState. */
-export const EMPTY_RESULT: ActionResult = { ok: false, message: "" };
 
 /* ---------------- Đăng nhập / đăng ký ---------------- */
 

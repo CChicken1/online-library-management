@@ -25,7 +25,6 @@ import {
    ========================================================================== */
 
 type MemberRow = Tables<"members">;
-type BookRow = Tables<"books">;
 type BookStockRow = Tables<"book_stock">;
 type CopyRow = Tables<"book_copies">;
 type LoanRow = Tables<"loans">;

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BookOpen, RotateCcw } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { Counts, PageHead, Row, Rows, SectionTitle, Status } from "@/components/ui";
-import { getSettings, listBooks, listLoans, listMembers } from "@/lib/api";
+import { getSettings, listBooks, listMembers } from "@/lib/api";
 import { loadIndex } from "@/lib/index-helpers";
 import {
   daysLate,

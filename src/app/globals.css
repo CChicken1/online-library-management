@@ -1464,7 +1464,10 @@ code.code {
   .shell {
     grid-template-columns: 76px minmax(0, 1fr);
   }
-  .slip { display: none; }
+  /* Chỉ ẩn panel cạnh của trang chủ (con trực tiếp của .shell).
+     Phiếu mượn nằm trong .center và phải luôn hiện, nếu không nút
+     "Giao sách và tạo phiếu" sẽ biến mất khỏi màn hình. */
+  .shell > .slip { display: none; }
   .center { padding: 26px 28px 60px; }
 }
 

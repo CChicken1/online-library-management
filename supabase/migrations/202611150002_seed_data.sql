@@ -1,5 +1,5 @@
 -- ===========================================================================
--- Dữ liệu mẫu, khớp với mock data ở src/lib/data.ts
+-- Dữ liệu mẫu, khớp với mock data ở prototype/
 -- Chạy sau 202611150001_init_library.sql
 -- ===========================================================================
 
@@ -15,17 +15,13 @@ where id = true;
 insert into public.books (id, code, title, author, subject, publisher, publish_year, page_count, shelf, keywords, summary)
 values
 ('11111111-1111-4111-8111-000000000001', '8432-B', 'Bên kia sông', 'Nguyễn Quang Thiều', 'Văn học', 'NXB Văn học', 1987, 312, 'Khoang 3, tầng 2', 'chiến tranh, nông thôn, đời thường',
- 'Câu chuyện bắt đầu từ một ngôi làng ven sông, nơi người dân sống bằng nghề làm ruộng và đánh cá. Tác giả đưa người đọc đi qua mùa lũ, mùa đói, và những đổi thay của một gia đình bình thường trong ba thế hệ.
-
-Văn phong giản dị, giàu chất thơ, với những đoạn tả cảnh sông và đồng lúa được viết bằng ngôn ngữ miền trung. Đây là tác phẩm tiêu biểu của dòng văn học miền Nam thập niên 1980.'),
+ 'Câu chuyện bắt đầu từ một ngôi làng ven sông, nơi người dân sống bằng nghề làm ruộng và đánh cá. Tác giả đưa người đọc đi qua mùa lũ, mùa đói, và những đổi thay của một gia đình bình thường trong ba thế hệ. Văn phong giản dị, giàu chất thơ, với những đoạn tả cảnh sông và đồng lúa được viết bằng ngôn ngữ miền trung. Đây là tác phẩm tiêu biểu của dòng văn học miền Nam thập niên 1980.'),
 
 ('11111111-1111-4111-8111-000000000002', '1913-D', 'Nhà giả kim', 'Paulo Coelho', 'Văn học', 'NXB Lao động', 1994, 208, 'Khoang 3, tầng 2', 'hành trình, giấc mơ, số phận',
- 'Cậu bé Santiago nghề nghiệp trẻ tìm được một cuốn sách cổ, trong đó có bí mật về vận mệnh. Cuốn sách dẫn cậu đi qua Tây Ban Nha, chợ tang, sa mạc Sahara, nơi cậu gặp những người thay đổi cách nhìn về cuộc đời.
-
-Tác phẩm được dịch ra hơn 80 ngôn ngữ, nằm trong nhóm bán chạy nhất mọi thời đại.'),
+ 'Cậu bé Santiago nghề nghiệp trẻ tìm được một cuốn sách cổ, trong đó có bí mật về vận mệnh. Cuốn sách dẫn cậu đi qua Tây Ban Nha, chợ tang, sa mạc Sahara, nơi cậu gặp những người thay đổi cách nhìn về cuộc đời. Tác phẩm được dịch ra hơn 80 ngôn ngữ, nằm trong nhóm bán chạy nhất mọi thời đại.'),
 
 ('11111111-1111-4111-8111-000000000003', '2001-A', 'Vườn thu', 'Nguyễn Ngọc Tư', 'Văn học', 'NXB Văn học', 1965, 186, 'Khoang 1, tầng 1', 'nông thôn, tình yêu, xã hội',
- 'Truyện ngắn về cuộc đời của cô Hà, một nữ công nhân ở nông trường. Cả tác phẩm được viết bằng giọng văn trong trẻo, tràn đầy sự tử tế, với những mối quan hệ giản dị mà sâu lắng giữa người lao động nông nghiệp và cán bộ công nhân.'),
+ 'Truyện ngắn về cuộc đời của cô Hà, một nữ công nhân ở nông trường. Cả tác phẩm được viết bằng giọng văn trong trẻ o, tràn đầy sự tử tế, với những mối quan hệ giản dị mà sâu lắng giữa người lao động nông nghiệp và cán bộ công nhân.'),
 
 ('11111111-1111-4111-8111-000000000004', '4471-E', 'Chuyện của thiên tài', 'Hector Malot', 'Thiếu nhi', 'NXB Kim Đồng', 1984, 340, 'Khoang 7, tầng 3', 'trẻ em, nghèo khó, hy vọng',
  'Cậu bé Rémi bị bỏ rơi ở ngoại ô Paris, phải tự kiếm ăn và học cách sống giữa những người xa lạ. Câu chuyện xoay quanh tình yêu thương gia đình, tình bạn và sự kiên trì trong những hoàn cảnh khắc nghiệt.'),
@@ -49,73 +45,31 @@ Tác phẩm được dịch ra hơn 80 ngôn ngữ, nằm trong nhóm bán chạ
  'Trong một đêm mất điện ở ngôi làng, mười mấy người kể lại những chuyện của cuộc đời mình. Cuốn sách nhỏ nhưng nặng trĩu tình.')
 on conflict (id) do nothing;
 
--- --- Bản vật lý: nhãn A1, A2, A3 tương ứng số bản của từng đầu sách ---
+-- --- Bản vật lý ---
+-- Số bản mỗi đầu sách chọn để "số bản sẵn có" khớp với prototype:
+--   Bên kia sông 1 (0 sẵn có), Nhà giả kim 2 (1), Vườn thu 8 (7),
+--   Chuyện của thiên tài 4 (3), Sơn Tặng 3 (2), Tôi thấy hoa vàng 5 (4),
+--   Lề thơ 7 (6), Đại vệ chí dịch 6 (5), Cho tôi mượn 2 (1), Tắt đèn 10 (9).
 insert into public.book_copies (id, book_id, copy_label, acquired_on, condition)
 select
   (('22222222-2222-4222-8222-' || lpad((row_number() over ())::text, 12, '0'))::uuid),
-  b.id,
-  lbl.label,
+  c.book_id,
+  'A' || g.n,
   date '2024-01-15',
   'Tốt'
-from public.books b
-cross join lateral (
-  values ('A1'), ('A2'), ('A3')
-) as lbl(label)
-where b.id in (
-  '11111111-1111-4111-8111-000000000001',
-  '11111111-1111-4111-8111-000000000002',
-  '11111111-1111-4111-8111-000000000003',
-  '11111111-1111-4111-8111-000000000004',
-  '11111111-1111-4111-8111-000000000005',
-  '11111111-1111-4111-8111-000000000006',
-  '11111111-1111-4111-8111-000000000007'
-)
-on conflict do nothing;
-
--- Nhà giả kim có 5 bản, Sơn Tặng 3, Chuyện của thiên tài 4, Tôi thấy hoa vàng 6,
--- Lề thơ 7, Đại vệ chí dịch 6, Cho tôi mượn 4, Tắt đèn 5, Vườn thu 8.
-insert into public.book_copies (id, book_id, copy_label, acquired_on, condition)
-select
-  (('33333333-3333-4333-8333-' || lpad((row_number() over ())::text, 12, '0'))::uuid),
-  b.id,
-  'A' || n,
-  date '2024-01-15',
-  'Tốt'
-from public.books b
-cross join lateral generate_series(1, b_copies.n) as n
-cross join lateral (select case b.id
-    when '11111111-1111-4111-8111-000000000002' then 5
-    when '11111111-1111-4111-8111-000000000004' then 4
-    when '11111111-1111-4111-8111-000000000006' then 6
-    when '11111111-1111-4111-8111-000000000007' then 7
-    when '11111111-1111-4111-8111-000000000008' then 6
-    when '11111111-1111-4111-8111-000000000009' then 4
-    when '11111111-1111-4111-8111-000000000010' then 5
-    when '11111111-1111-4111-8111-000000000003' then 8
-  end) as b_copies(n)
-where b.id in (
-  '11111111-1111-4111-8111-000000000002',
-  '11111111-1111-4111-8111-000000000003',
-  '11111111-1111-4111-8111-000000000004',
-  '11111111-1111-4111-8111-000000000006',
-  '11111111-1111-4111-8111-000000000007',
-  '11111111-1111-4111-8111-000000000008',
-  '11111111-1111-4111-8111-000000000009',
-  '11111111-1111-4111-8111-000000000010'
-)
-on conflict do nothing;
-
--- Vườn thu đã có A1..A3 ở khối trên, chỉ thêm B1..B5.
-insert into public.book_copies (id, book_id, copy_label, acquired_on, condition)
-select
-  (('44444444-4444-4444-8444-' || lpad((row_number() over ())::text, 12, '0'))::uuid),
-  b.id,
-  'B' || n,
-  date '2024-01-15',
-  'Tốt'
-from public.books b
-cross join lateral generate_series(1, 5) as n
-where b.id = '11111111-1111-4111-8111-000000000003'
+from (values
+  ('11111111-1111-4111-8111-000000000001'::uuid, 1),
+  ('11111111-1111-4111-8111-000000000002'::uuid, 2),
+  ('11111111-1111-4111-8111-000000000003'::uuid, 8),
+  ('11111111-1111-4111-8111-000000000004'::uuid, 4),
+  ('11111111-1111-4111-8111-000000000005'::uuid, 3),
+  ('11111111-1111-4111-8111-000000000006'::uuid, 5),
+  ('11111111-1111-4111-8111-000000000007'::uuid, 7),
+  ('11111111-1111-4111-8111-000000000008'::uuid, 6),
+  ('11111111-1111-4111-8111-000000000009'::uuid, 2),
+  ('11111111-1111-4111-8111-000000000010'::uuid, 10)
+) as c(book_id, copies)
+cross join lateral generate_series(1, c.copies) as g(n)
 on conflict do nothing;
 
 -- --- Hội viên ---
@@ -137,39 +91,46 @@ insert into public.loans (id, receipt_code, book_id, copy_id, member_id, borrowe
 select
   (('66666666-6666-4666-8666-' || lpad((row_number() over ())::text, 12, '0'))::uuid),
   v.receipt_code,
-  v.book_id::uuid,
+  v.book_id,
   (select c.id from public.book_copies c
-     where c.book_id = v.book_id::uuid and c.copy_label = v.copy_label),
-  v.member_id::uuid,
-  v.borrowed_on::date,
-  v.due_on::date,
-  v.returned_on::date,
+     where c.book_id = v.book_id and c.copy_label = v.copy_label),
+  v.member_id,
+  v.borrowed_on,
+  v.due_on,
+  v.returned_on,
   v.fine_amount
 from (values
-  ('PM-2026-1026-084', '11111111-1111-4111-8111-000000000002', 'A1', '55555555-5555-4555-8555-000000000001', '2026-10-26', '2026-11-09', null, 102000),
-  ('PM-2026-1021-117', '11111111-1111-4111-8111-000000000001', 'A2', '55555555-5555-4555-8555-000000000007', '2026-10-21', '2026-11-04', null, 187000),
-  ('PM-2026-1108-203', '11111111-1111-4111-8111-000000000003', 'B1', '55555555-5555-4555-8555-000000000004', '2026-11-04', '2026-11-18', null, 0),
-  ('PM-2026-1106-244', '11111111-1111-4111-8111-000000000004', 'A3', '55555555-5555-4555-8555-000000000008', '2026-11-06', '2026-11-24', null, 0),
-  ('PM-2026-1108-271', '11111111-1111-4111-8111-000000000005', 'A1', '55555555-5555-4555-8555-000000000005', '2026-11-08', '2026-11-26', null, 0),
-  ('PM-2026-1109-289', '11111111-1111-4111-8111-000000000006', 'B2', '55555555-5555-4555-8555-000000000006', '2026-11-09', '2026-11-27', null, 0),
-  ('PM-2026-1105-302', '11111111-1111-4111-8111-000000000007', 'A1', '55555555-5555-4555-8555-000000000003', '2026-11-05', '2026-11-19', null, 0),
-  ('PM-2026-1101-215', '11111111-1111-4111-8111-000000000003', 'A1', '55555555-5555-4555-8555-000000000002', '2026-11-01', '2026-11-15', '2026-11-12', 0),
-  ('PM-2026-1028-176', '11111111-1111-4111-8111-000000000009', 'A1', '55555555-5555-4555-8555-000000000008', '2026-10-28', '2026-11-11', '2026-11-13', 34000)
+  -- Đang mượn, trễ hạn
+  ('PM-2026-1026-084', '11111111-1111-4111-8111-000000000002'::uuid, 'A1', '55555555-5555-4555-8555-000000000001'::uuid, date '2026-10-26', date '2026-11-09', null::date, 102000),
+  ('PM-2026-1021-117', '11111111-1111-4111-8111-000000000001'::uuid, 'A1', '55555555-5555-4555-8555-000000000007'::uuid, date '2026-10-21', date '2026-11-04', null::date, 187000),
+  -- Đang mượn, còn hạn
+  ('PM-2026-1108-203', '11111111-1111-4111-8111-000000000003'::uuid, 'A2', '55555555-5555-4555-8555-000000000004'::uuid, date '2026-11-04', date '2026-11-18', null::date, 0),
+  ('PM-2026-1106-244', '11111111-1111-4111-8111-000000000004'::uuid, 'A3', '55555555-5555-4555-8555-000000000008'::uuid, date '2026-11-06', date '2026-11-24', null::date, 0),
+  ('PM-2026-1108-271', '11111111-1111-4111-8111-000000000005'::uuid, 'A1', '55555555-5555-4555-8555-000000000002'::uuid, date '2026-11-08', date '2026-11-26', null::date, 0),
+  ('PM-2026-1109-289', '11111111-1111-4111-8111-000000000006'::uuid, 'A4', '55555555-5555-4555-8555-000000000006'::uuid, date '2026-11-09', date '2026-11-27', null::date, 0),
+  ('PM-2026-1105-302', '11111111-1111-4111-8111-000000000007'::uuid, 'A1', '55555555-5555-4555-8555-000000000003'::uuid, date '2026-11-05', date '2026-11-19', null::date, 0),
+  ('PM-2026-1110-310', '11111111-1111-4111-8111-000000000008'::uuid, 'A1', '55555555-5555-4555-8555-000000000003'::uuid, date '2026-11-10', date '2026-11-24', null::date, 0),
+  ('PM-2026-1106-322', '11111111-1111-4111-8111-000000000010'::uuid, 'A1', '55555555-5555-4555-8555-000000000007'::uuid, date '2026-11-06', date '2026-11-20', null::date, 0),
+  ('PM-2026-1109-330', '11111111-1111-4111-8111-000000000009'::uuid, 'A1', '55555555-5555-4555-8555-000000000008'::uuid, date '2026-11-09', date '2026-11-23', null::date, 0),
+  -- Đã trả
+  ('PM-2026-1101-215', '11111111-1111-4111-8111-000000000003'::uuid, 'A1', '55555555-5555-4555-8555-000000000002'::uuid, date '2026-11-01', date '2026-11-15', date '2026-11-12', 0),
+  ('PM-2026-1028-176', '11111111-1111-4111-8111-000000000002'::uuid, 'A2', '55555555-5555-4555-8555-000000000008'::uuid, date '2026-10-28', date '2026-11-11', date '2026-11-13', 34000)
 ) as v(receipt_code, book_id, copy_label, member_id, borrowed_on, due_on, returned_on, fine_amount)
 on conflict do nothing;
 
 -- --- Đặt trước ---
-insert into public.reservations (book_id, member_id, reserved_on, status)
+insert into public.reservations (id, book_id, member_id, reserved_on, status)
 values
-('11111111-1111-4111-8111-000000000001', '55555555-5555-4555-8555-000000000004', date '2026-11-10', 'waiting'),
-('11111111-1111-4111-8111-000000000002', '55555555-5555-4555-8555-000000000008', date '2026-11-11', 'waiting'),
-('11111111-1111-4111-8111-000000000001', '55555555-5555-4555-8555-000000000002', date '2026-11-12', 'waiting')
-on conflict do nothing;
+('88888888-8888-4888-8888-000000000001', '11111111-1111-4111-8111-000000000001', '55555555-5555-4555-8555-000000000004', date '2026-11-10', 'waiting'),
+('88888888-8888-4888-8888-000000000002', '11111111-1111-4111-8111-000000000002', '55555555-5555-4555-8555-000000000008', date '2026-11-11', 'waiting'),
+('88888888-8888-4888-8888-000000000003', '11111111-1111-4111-8111-000000000001', '55555555-5555-4555-8555-000000000002', date '2026-11-12', 'waiting')
+on conflict (id) do nothing;
 
 -- --- Phí trễ hạn ---
-insert into public.fines (member_id, days_late, amount, paid)
+-- Dùng id cố định để chạy lại script không nhân bản dòng.
+insert into public.fines (id, member_id, days_late, amount, paid)
 values
-('55555555-5555-4555-8555-000000000007', 11, 187000, false),
-('55555555-5555-4555-8555-000000000001', 6, 102000, false),
-('55555555-5555-4555-8555-000000000008', 4, 68000, false)
-on conflict do nothing;
+('77777777-7777-4777-8777-000000000001', '55555555-5555-4555-8555-000000000007'::uuid, 11, 187000, false),
+('77777777-7777-4777-8777-000000000002', '55555555-5555-4555-8555-000000000001'::uuid, 6, 102000, false),
+('77777777-7777-4777-8777-000000000003', '55555555-5555-4555-8555-000000000008'::uuid, 2, 34000, false)
+on conflict (id) do nothing;

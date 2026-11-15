@@ -2,7 +2,6 @@ import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
 import { PageHead, Row, Rows, SectionTitle, Status } from "@/components/ui";
 import { listBooks, listLoans, listShelves, listSubjects } from "@/lib/api";
-import { formatDate } from "@/lib/types";
 
 const PER_PAGE = 8;
 

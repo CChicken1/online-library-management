@@ -4,7 +4,7 @@ import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Check, RotateCcw } from "lucide-react";
 import { returnLoanAction, renewLoanAction } from "@/app/actions";
-import { EMPTY_RESULT } from "@/app/actions";
+import { EMPTY_RESULT } from "@/lib/action-result";
 
 /**
  * Nút trả sách. Dùng useActionState để hiện kết quả ngay tại chỗ,

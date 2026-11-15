@@ -80,11 +80,14 @@ create table if not exists public.loans (
   note          text,
   created_by    uuid references auth.users (id),
   created_at    timestamptz not null default now(),
-  updated_at    timestamptz not null default now(),
-  -- Một bản vật lý chỉ nằm trong một phiếu chưa trả tại một thời điểm.
-  constraint one_open_loan_per_copy
-    unique (copy_id) where returned_on is null
+  updated_at    timestamptz not null default now()
 );
+
+-- Một bản vật lý chỉ nằm trong một phiếu chưa trả tại một thời điểm.
+-- Postgres không cho ràng buộc UNIQUE kèm điều kiện, nên dùng partial unique index.
+create unique index if not exists one_open_loan_per_copy
+  on public.loans (copy_id)
+  where returned_on is null;
 
 create index if not exists loans_member_idx on public.loans (member_id);
 create index if not exists loans_book_idx   on public.loans (book_id);
@@ -264,4 +267,16 @@ end $$;
 -- 6. Nối backend Supabase (REST), bảng cần đưa vào publication
 -- ---------------------------------------------------------------------------
 
-alter publication supabase_realtime add table public.loans;
+-- Cho phép chạy lại script nhiều lần mà không báo lỗi publication.
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public'
+      and tablename = 'loans'
+  ) then
+    alter publication supabase_realtime add table public.loans;
+  end if;
+end $$;

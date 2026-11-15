@@ -4,8 +4,8 @@ import { useActionState, useMemo, useState } from "react";
 import Link from "next/link";
 import { AlertTriangle, Check, Search } from "lucide-react";
 import { issueLoanAction } from "@/app/actions";
-import { EMPTY_RESULT } from "@/app/actions";
-import type { ActionResult } from "@/app/actions";
+import { EMPTY_RESULT } from "@/lib/action-result";
+import type { ActionResult } from "@/lib/action-result";
 import type { Book, Member } from "@/lib/types";
 
 /* ==========================================================================

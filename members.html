@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hội viên — Sổ Mượn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Be+Vietnam+Pro:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+/* ---- Hội viên: hạn thẻ là dữ liệu chính, đặt cạnh tên ---- */
+.member-name{font-family:"Newsreader",serif;font-size:16px;font-weight:500;letter-spacing:-0.01em}
+.expiry{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--graphite)}
+.expiry.soon{color:var(--stamp)}
+.expiry.ok{color:var(--ink)}
+.hold{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--graphite)}
+.hold b{font-family:"IBM Plex Mono",monospace;font-weight:500;color:var(--ink)}
+.tier{font-size:12px;font-weight:500;color:var(--graphite)}
+.pager{display:flex;align-items:center;gap:14px;padding-top:14px;font-size:12.5px;color:var(--graphite)}
+.pager .spacer{flex:1}
+.pager a{color:var(--graphite);text-decoration:none;border:1px solid var(--rule);border-radius:2px;padding:4px 10px}
+.pager a:hover{border-color:var(--graphite);color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wordmark">Sổ <b>Mượn</b></div>
+  <div class="brand-sub">Thư viện Trung tâm</div>
+  <label class="search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    Tìm sách, hội viên, phiếu mượn
+    <kbd>/</kbd>
+  </label>
+  <div class="icon-btn" title="Thông báo">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.5 21a2 2 0 0 0 3 0"/></svg>
+  </div>
+  <div class="avatar">TT</div>
+</header>
+
+<div class="shell no-panel">
+
+  <nav class="rail">
+    <a href="dashboard.html">
+      <svg viewBox="0 0 24 24"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v18H5.5A2.5 2.5 0 0 1 3 18.5z"/><path d="M11 3h5.5A2.5 2.5 0 0 1 19 5.5v13a2.5 2.5 0 0 1-2.5 2.5H11"/></svg>
+      Sách
+    </a>
+    <a href="loans.html">
+      <svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/></svg>
+      Mượn &amp; Trả
+    </a>
+    <a href="members.html" aria-current="page">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3.2 3.2 0 0 1 0 6.2"/><path d="M17 20a5 5 0 0 0-2-4"/></svg>
+      Hội viên
+    </a>
+    <a href="reports.html">
+      <svg viewBox="0 0 24 24"><path d="M3.5 21h17"/><rect x="5" y="11" width="3" height="6"/><rect x="10" y="6" width="3" height="11"/><rect x="15" y="14" width="3" height="3"/></svg>
+      Báo cáo
+    </a>
+    <div class="spacer"></div>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M4 7h9"/><path d="M19 7h1.5"/><path d="M4 17h3.5"/><path d="M13.5 17H20"/><circle cx="15.5" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg>
+      Cài đặt
+    </a>
+  </nav>
+
+  <main class="center">
+    <div class="page-head">
+      <div>
+        <h1 class="display">Hội viên</h1>
+        <p class="sub">
+          <span>3.412 hội viên</span>
+          <span class="rule-sep">86 thẻ hết hạn trong tháng này</span>
+        </p>
+      </div>
+      <div class="actions">
+        <button class="btn quiet">Xuất danh sách</button>
+        <button class="btn">Thêm hội viên</button>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="counts four">
+        <div><span class="n">3.412</span><span class="label">hội viên đang hoạt động</span></div>
+        <div><span class="n">86</span><span class="label">thẻ hết hạn trong tháng này</span></div>
+        <div><span class="n">24</span><span class="label">đang có sách trễ hạn</span></div>
+        <div><span class="n">37</span><span class="label">đơn đặt trước đang chờ</span></div>
+      </div>
+    </section>
+
+    <div class="tabs">
+      <a href="#" aria-current="page">Tất cả</a>
+      <a href="#">Thẻ sắp hết hạn</a>
+      <a href="#">Đang trễ hạn</a>
+      <a href="#">Không hoạt động</a>
+    </div>
+
+    <div class="fieldset">
+      <input type="search" placeholder="Tìm theo tên, số thẻ, email" />
+      <select class="select-mini">
+        <option>Mọi hạng thẻ</option>
+        <option>Thường</option>
+        <option>Vàng</option>
+        <option>Đọc tại chỗ</option>
+      </select>
+      <button class="btn quiet">Lọc</button>
+    </div>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Danh sách</h2>
+        <span class="line"></span>
+        <span class="count">3.412 hội viên</span>
+      </div>
+
+      <div class="rows">
+        <div class="row mem">
+          <span class="member-name">Trần Minh Quân
+            <span class="sub code">0382</span>
+          </span>
+          <span class="tier">Thường</span>
+          <span class="hold">Đang mượn <b>2</b></span>
+          <span class="expiry ok">30/04/2027</span>
+          <span class="status"><i></i>Hoạt động</span>
+        </div>
+        <div class="row mem">
+          <span class="member-name">Nguyễn Thị Lan
+            <span class="sub code">1904</span>
+          </span>
+          <span class="tier">Thường</span>
+          <span class="hold">Đang mượn <b>1</b></span>
+          <span class="expiry soon">30/11/2026</span>
+          <span class="status late"><i></i>Sắp hết hạn</span>
+        </div>
+        <div class="row mem">
+          <span class="member-name">Lê Thu Hà
+            <span class="sub code">0557</span>
+          </span>
+          <span class="tier">Vàng</span>
+          <span class="hold">Đang mượn <b>4</b></span>
+          <span class="expiry ok">12/08/2027</span>
+          <span class="status"><i></i>Hoạt động</span>
+        </div>
+        <div class="row mem">
+          <span class="member-name">Phạm Anh Khoa
+            <span class="sub code">2011</span>
+          </span>
+          <span class="tier">Thường</span>
+          <span class="hold">Đang mượn <b>3</b></span>
+          <span class="expiry soon">08/12/2026</span>
+          <span class="status late"><i></i>Sắp hết hạn</span>
+        </div>
+        <div class="row mem">
+          <span class="member-name">Vũ Mai Chi
+            <span class="sub code">1663</span>
+          </span>
+          <span class="tier">Đọc tại chỗ</span>
+          <span class="hold">Đang mượn <b>0</b></span>
+          <span class="expiry ok">22/01/2027</span>
+          <span class="status"><i></i>Hoạt động</span>
+        </div>
+        <div class="row mem">
+          <span class="member-name">Hoàng Gia Bảo
+            <span class="sub code">2448</span>
+          </span>
+          <span class="tier">Thường</span>
+          <span class="hold">Đang mượn <b>1</b></span>
+          <span class="expiry ok">05/03/2027</span>
+          <span class="status"><i></i>Hoạt động</span>
+        </div>
+        <div class="row mem">
+          <span class="member-name">Nguyễn Văn Hùng
+            <span class="sub code">0876</span>
+          </span>
+          <span class="tier">Thường</span>
+          <span class="hold">Đang mượn <b>2</b></span>
+          <span class="expiry ok">17/09/2026</span>
+          <span class="status late"><i></i>Trễ hạn</span>
+        </div>
+        <div class="row mem">
+          <span class="member-name">Đỗ Thu Trang
+            <span class="sub code">1229</span>
+          </span>
+          <span class="tier">Vàng</span>
+          <span class="hold">Đang mượn <b>5</b></span>
+          <span class="expiry ok">14/12/2026</span>
+          <span class="status"><i></i>Hoạt động</span>
+        </div>
+      </div>
+
+      <div class="pager">
+        <span>1–8 trong 3.412</span>
+        <span class="spacer"></span>
+        <a href="#">Trước</a>
+        <a href="#">Sau</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

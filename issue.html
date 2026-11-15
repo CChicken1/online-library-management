@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ghi mượn — Sổ Mượn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Be+Vietnam+Pro:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+/* ---- Màn hình giao dịch: form trái, xác nhận phải ---- */
+.issue{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:34px;align-items:start}
+.slipcard{background:var(--stock);border:1px solid var(--rule);border-radius:2px;padding:18px 20px}
+.slipcard h3{font-family:"Newsreader",serif;font-size:16px;font-weight:500;margin-bottom:2px}
+.slipcard .id{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--foxing);margin-bottom:14px}
+.kv{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6px 12px;font-size:13px;padding:8px 0;border-top:1px solid var(--rule)}
+.kv dt{color:var(--graphite);font-size:12px}
+.kv dd{font-weight:500}
+.chosen{display:flex;align-items:center;gap:10px;border:1px solid var(--rule);border-radius:2px;padding:9px 11px;background:var(--stock)}
+.chosen .t{font-family:"Newsreader",serif;font-size:15px;font-weight:500}
+.chosen .m{font-size:12px;color:var(--graphite)}
+.chosen .x{margin-left:auto;cursor:pointer;color:var(--graphite);border:0;background:none;font:inherit;font-size:16px;line-height:1;padding:2px 4px}
+.chosen .x:hover{color:var(--stamp)}
+.notice{border-left:2px solid var(--stamp);background:var(--stock);padding:11px 14px;border-radius:0 2px 2px 0;font-size:13px}
+.notice b{display:block;margin-bottom:2px;color:var(--stamp)}
+.notice p{color:var(--graphite);font-size:12.5px}
+.formfoot{display:flex;gap:8px;padding-top:16px;margin-top:18px;border-top:1px solid var(--rule)}
+.fine{display:flex;align-items:baseline;gap:8px;margin-top:4px}
+.fine .amt{font-family:"Newsreader",serif;font-size:26px;font-weight:500;color:var(--stamp)}
+.fine .per{font-size:12px;color:var(--graphite)}
+@media (max-width:1180px){.issue{grid-template-columns:minmax(0,1fr);gap:24px}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wordmark">Sổ <b>Mượn</b></div>
+  <div class="brand-sub">Thư viện Trung tâm</div>
+  <label class="search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    Tìm sách, hội viên, phiếu mượn
+    <kbd>/</kbd>
+  </label>
+  <div class="icon-btn" title="Thông báo">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.5 21a2 2 0 0 0 3 0"/></svg>
+  </div>
+  <div class="avatar">TT</div>
+</header>
+
+<div class="shell no-panel">
+
+  <nav class="rail">
+    <a href="dashboard.html">
+      <svg viewBox="0 0 24 24"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v18H5.5A2.5 2.5 0 0 1 3 18.5z"/><path d="M11 3h5.5A2.5 2.5 0 0 1 19 5.5v13a2.5 2.5 0 0 1-2.5 2.5H11"/></svg>
+      Sách
+    </a>
+    <a href="loans.html" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/></svg>
+      Mượn &amp; Trả
+    </a>
+    <a href="members.html">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3.2 3.2 0 0 1 0 6.2"/><path d="M17 20a5 5 0 0 0-2-4"/></svg>
+      Hội viên
+    </a>
+    <a href="reports.html">
+      <svg viewBox="0 0 24 24"><path d="M3.5 21h17"/><rect x="5" y="11" width="3" height="6"/><rect x="10" y="6" width="3" height="11"/><rect x="15" y="14" width="3" height="3"/></svg>
+      Báo cáo
+    </a>
+    <div class="spacer"></div>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M4 7h9"/><path d="M19 7h1.5"/><path d="M4 17h3.5"/><path d="M13.5 17H20"/><circle cx="15.5" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg>
+      Cài đặt
+    </a>
+  </nav>
+
+  <main class="center">
+    <div class="page-head">
+      <div>
+        <h1 class="display">Ghi mượn</h1>
+        <p class="sub"><span>Thứ Bảy, 15 tháng 11</span></p>
+      </div>
+    </div>
+
+    <div class="issue">
+
+      <!-- FORM -->
+      <section>
+        <div class="field">
+          <label for="member">Hội viên</label>
+          <input id="member" type="search" placeholder="Nhập tên hoặc số thẻ" value="Trần Minh Quân, thẻ 0382" />
+          <span class="hint">Hội viên đang mượn 2 cuốn, còn được mượn 3 cuốn</span>
+        </div>
+
+        <div class="field">
+          <label for="book">Sách</label>
+          <input id="book" type="search" placeholder="Nhập tên sách hoặc quét mã vạch" />
+        </div>
+
+        <div class="field" style="margin-top:12px">
+          <span class="label">Sách đã chọn</span>
+          <div class="chosen">
+            <div>
+              <div class="t">Nhà giả kim</div>
+              <div class="m">1913-D, Paulo Coelho</div>
+            </div>
+            <button class="x" title="Bỏ chọn">×</button>
+          </div>
+          <div class="chosen" style="margin-top:8px">
+            <div>
+              <div class="t">Vườn thu</div>
+              <div class="m">2001-A, Nguyễn Ngọc Tư</div>
+            </div>
+            <button class="x" title="Bỏ chọn">×</button>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="due">Ngày đến hạn</label>
+            <input id="due" type="date" value="2026-11-29" />
+            <span class="hint">14 ngày, theo quy định hội viên thường</span>
+          </div>
+          <div class="field">
+            <label for="type">Hạn mượn</label>
+            <select id="type">
+              <option>14 ngày, hội viên thường</option>
+              <option>28 ngày, hội viên vàng</option>
+              <option>7 ngày, sách mới về</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="formfoot">
+          <button class="btn">Ghi mượn</button>
+          <button class="btn quiet">Trả sách</button>
+          <button class="btn quiet" style="margin-left:auto">Hủy</button>
+        </div>
+      </section>
+
+      <!-- PHIẾU XÁC NHẬN -->
+      <aside>
+        <div class="slipcard">
+          <h3>Phiếu mượn</h3>
+          <div class="id">Sẽ cấp phiếu PM-2026-0115-084</div>
+
+          <dl class="kv">
+            <dt>Hội viên</dt><dd>Trần Minh Quân</dd>
+            <dt>Số thẻ</dt><dd class="code">0382</dd>
+            <dt>Hạn mượn</dt><dd>14 ngày</dd>
+            <dt>Đến hạn</dt><dd>29/11/2026</dd>
+          </dl>
+
+          <dl class="kv" style="border-top:1px solid var(--rule)">
+            <dt>Số sách</dt><dd>2 cuốn</dd>
+            <dt>Phí cầu mượn</dt><dd>0 đ</dd>
+          </dl>
+
+          <div style="margin-top:14px">
+            <div class="label">Khoang đặt</div>
+            <div style="font-size:13px;margin-top:3px">Khoang 3, tầng 2</div>
+          </div>
+        </div>
+
+        <div class="notice" style="margin-top:16px">
+          <b>Vườn thu chỉ còn 1 bản</b>
+          <p>Nếu hội viên mượn cuốn này, sẽ không còn bản nào trong kho để mượn tiếp cho đến 20/11.</p>
+        </div>
+
+        <div class="slipcard" style="margin-top:16px">
+          <h3>Sách đang trễ hạn</h3>
+          <div class="id" style="margin-bottom:10px">Cần thu phí trước khi mượn tiếp</div>
+          <div class="kv">
+            <dt>Bên kia sông</dt><dd style="color:var(--stamp)">Trễ 11 ngày</dd>
+            <dt>Nhà giả kim</dt><dd style="color:var(--stamp)">Trễ 6 ngày</dd>
+          </div>
+          <div class="fine">
+            <span class="amt">85.000</span>
+            <span class="per">đ, 17.000 đ mỗi ngày</span>
+          </div>
+          <button class="btn wide" style="margin-top:14px">Thu phí 85.000 đ</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

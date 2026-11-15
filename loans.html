@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mượn &amp; Trả — Sổ Mượn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Be+Vietnam+Pro:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+/* ---- Phiếu mượn: cột "còn hạn" là thông tin quan trọng nhất ---- */
+.due{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--graphite)}
+.due.warn{color:var(--foxing)}
+.due.late{color:var(--stamp)}
+.due .days{display:block;font-size:11px;margin-top:1px}
+.pager{display:flex;align-items:center;gap:14px;padding-top:14px;font-size:12.5px;color:var(--graphite)}
+.pager .spacer{flex:1}
+.pager a{color:var(--graphite);text-decoration:none;border:1px solid var(--rule);border-radius:2px;padding:4px 10px}
+.pager a:hover{border-color:var(--graphite);color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wordmark">Sổ <b>Mượn</b></div>
+  <div class="brand-sub">Thư viện Trung tâm</div>
+  <label class="search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    Tìm sách, hội viên, phiếu mượn
+    <kbd>/</kbd>
+  </label>
+  <div class="icon-btn" title="Thông báo">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.5 21a2 2 0 0 0 3 0"/></svg>
+  </div>
+  <div class="avatar">TT</div>
+</header>
+
+<div class="shell no-panel">
+
+  <nav class="rail">
+    <a href="dashboard.html">
+      <svg viewBox="0 0 24 24"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v18H5.5A2.5 2.5 0 0 1 3 18.5z"/><path d="M11 3h5.5A2.5 2.5 0 0 1 19 5.5v13a2.5 2.5 0 0 1-2.5 2.5H11"/></svg>
+      Sách
+    </a>
+    <a href="loans.html" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/></svg>
+      Mượn &amp; Trả
+    </a>
+    <a href="members.html">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3.2 3.2 0 0 1 0 6.2"/><path d="M17 20a5 5 0 0 0-2-4"/></svg>
+      Hội viên
+    </a>
+    <a href="reports.html">
+      <svg viewBox="0 0 24 24"><path d="M3.5 21h17"/><rect x="5" y="11" width="3" height="6"/><rect x="10" y="6" width="3" height="11"/><rect x="15" y="14" width="3" height="3"/></svg>
+      Báo cáo
+    </a>
+    <div class="spacer"></div>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M4 7h9"/><path d="M19 7h1.5"/><path d="M4 17h3.5"/><path d="M13.5 17H20"/><circle cx="15.5" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg>
+      Cài đặt
+    </a>
+  </nav>
+
+  <main class="center">
+    <div class="page-head">
+      <div>
+        <h1 class="display">Mượn &amp; Trả</h1>
+        <p class="sub">
+          <span>1.055 đang mượn</span>
+          <span class="rule-sep">12 trễ hạn</span>
+          <span class="rule-sep">6 đến hạn hôm nay</span>
+        </p>
+      </div>
+      <div class="actions">
+        <button class="btn quiet">Trả theo mã phiếu</button>
+        <button class="btn">Ghi mượn</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <a href="#" aria-current="page">Đang mượn</a>
+      <a href="#">Đến hạn hôm nay</a>
+      <a href="#">Trễ hạn</a>
+      <a href="#">Đã trả hôm nay</a>
+      <a href="#">Đặt trước</a>
+    </div>
+
+    <div class="fieldset">
+      <input type="search" placeholder="Tìm theo tên sách, hội viên, mã phiếu" />
+      <button class="btn quiet">Lọc</button>
+      <button class="btn quiet">Bỏ lọc</button>
+    </div>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Phiếu đang mượn</h2>
+        <span class="line"></span>
+        <span class="count">1.055 phiếu</span>
+      </div>
+
+      <div class="rows">
+        <div class="row loan">
+          <span class="no code">PM-2026-0115-084</span>
+          <span class="title">Nhà giả kim
+            <span class="sub">Trần Minh Quân</span>
+          </span>
+          <span class="due late">Đến hạn 15/11
+            <span class="days">Trễ 6 ngày</span>
+          </span>
+          <span class="who code">Thẻ 0382</span>
+          <span class="status late"><i></i>Trễ hạn</span>
+        </div>
+        <div class="row loan">
+          <span class="no code">PM-2026-0102-117</span>
+          <span class="title">Bên kia sông
+            <span class="sub">Nguyễn Văn Hùng</span>
+          </span>
+          <span class="due late">Đến hạn 04/11
+            <span class="days">Trễ 11 ngày</span>
+          </span>
+          <span class="who code">Thẻ 0876</span>
+          <span class="status late"><i></i>Trễ hạn</span>
+        </div>
+        <div class="row loan">
+          <span class="no code">PM-2026-0108-203</span>
+          <span class="title">Vườn thu
+            <span class="sub">Phạm Anh Khoa</span>
+          </span>
+          <span class="due warn">Đến hạn 18/11
+            <span class="days">Còn 3 ngày</span>
+          </span>
+          <span class="who code">Thẻ 2011</span>
+          <span class="status"><i></i>Đang mượn</span>
+        </div>
+        <div class="row loan">
+          <span class="no code">PM-2026-0110-244</span>
+          <span class="title">Chuyện của thiên tài
+            <span class="sub">Đỗ Thu Trang</span>
+          </span>
+          <span class="due">Đến hạn 24/11
+            <span class="days">Còn 9 ngày</span>
+          </span>
+          <span class="who code">Thẻ 1229</span>
+          <span class="status"><i></i>Đang mượn</span>
+        </div>
+        <div class="row loan">
+          <span class="no code">PM-2026-0112-271</span>
+          <span class="title">Sơn Tặng
+            <span class="sub">Vũ Mai Chi</span>
+          </span>
+          <span class="due">Đến hạn 26/11
+            <span class="days">Còn 11 ngày</span>
+          </span>
+          <span class="who code">Thẻ 1663</span>
+          <span class="status"><i></i>Đang mượn</span>
+        </div>
+        <div class="row loan">
+          <span class="no code">PM-2026-0113-289</span>
+          <span class="title">Tôi thấy hoa vàng trên cỏ xanh
+            <span class="sub">Hoàng Gia Bảo</span>
+          </span>
+          <span class="due">Đến hạn 27/11
+            <span class="days">Còn 12 ngày</span>
+          </span>
+          <span class="who code">Thẻ 2448</span>
+          <span class="status"><i></i>Đang mượn</span>
+        </div>
+        <div class="row loan">
+          <span class="no code">PM-2026-0114-302</span>
+          <span class="title">Lề thơ
+            <span class="sub">Lê Thu Hà</span>
+          </span>
+          <span class="due warn">Đến hạn 19/11
+            <span class="days">Còn 4 ngày</span>
+          </span>
+          <span class="who code">Thẻ 0557</span>
+          <span class="status"><i></i>Đang mượn</span>
+        </div>
+      </div>
+
+      <div class="pager">
+        <span>1–7 trong 1.055</span>
+        <span class="spacer"></span>
+        <a href="#">Trước</a>
+        <a href="#">Sau</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

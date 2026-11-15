@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sổ Mượn — Thư viện Trung tâm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Be+Vietnam+Pro:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wordmark">Sổ <b>Mượn</b></div>
+  <div class="brand-sub">Thư viện Trung tâm</div>
+  <label class="search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    Tìm sách, hội viên, phiếu mượn
+    <kbd>/</kbd>
+  </label>
+  <div class="icon-btn" title="Thông báo">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.5 21a2 2 0 0 0 3 0"/></svg>
+  </div>
+  <div class="avatar">TT</div>
+</header>
+
+<div class="shell">
+
+  <!-- LEFT RAIL -->
+  <nav class="rail">
+    <a href="dashboard.html" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v18H5.5A2.5 2.5 0 0 1 3 18.5z"/><path d="M11 3h5.5A2.5 2.5 0 0 1 19 5.5v13a2.5 2.5 0 0 1-2.5 2.5H11"/></svg>
+      Sách
+    </a>
+    <a href="loans.html">
+      <svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/></svg>
+      Mượn &amp; Trả
+    </a>
+    <a href="members.html">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3.2 3.2 0 0 1 0 6.2"/><path d="M17 20a5 5 0 0 0-2-4"/></svg>
+      Hội viên
+    </a>
+    <a href="reports.html">
+      <svg viewBox="0 0 24 24"><path d="M3.5 21h17"/><rect x="5" y="11" width="3" height="6"/><rect x="10" y="6" width="3" height="11"/><rect x="15" y="14" width="3" height="3"/></svg>
+      Báo cáo
+    </a>
+    <div class="spacer"></div>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M4 7h9"/><path d="M19 7h1.5"/><path d="M4 17h3.5"/><path d="M13.5 17H20"/><circle cx="15.5" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg>
+      Cài đặt
+    </a>
+  </nav>
+
+  <!-- CENTER -->
+  <main class="center">
+    <div class="page-head">
+      <div>
+        <h1 class="display">Sổ mượn hôm nay</h1>
+        <p class="sub">
+          <span>Thứ Bảy, 15 tháng 11</span>
+          <span class="rule-sep">Cập nhật lúc 09:41</span>
+        </p>
+      </div>
+      <a class="btn" href="issue.html">Ghi mượn</a>
+    </div>
+
+    <!-- SHELF -->
+    <section class="section">
+      <div class="section-title">
+        <h2>Kệ đang lưu hành</h2>
+        <span class="line"></span>
+        <span class="count">12 sách trong khoang</span>
+      </div>
+      <div class="shelf">
+        <div class="shelf-head">
+          <span class="label">Chiều cao là số ngày còn hạn</span>
+          <span class="label">3 trễ hạn</span>
+        </div>
+        <div class="spines">
+          <div class="spine" style="flex:9 0 15px;height:70px"><span class="tip">Vườn thu, 12 ngày còn</span></div>
+          <div class="spine late" style="flex:7 0 12px;height:22px"><span class="tip">Nhà giả kim, trễ 6 ngày</span></div>
+          <div class="spine" style="flex:11 0 18px;height:82px"><span class="tip">Đại vệ chí dịch, 14 ngày còn</span></div>
+          <div class="spine" style="flex:8 0 14px;height:52px"><span class="tip">Tắt đèn, 9 ngày còn</span></div>
+          <div class="spine" style="flex:6 0 11px;height:34px"><span class="tip">Cho tôi mượn một lần, 6 ngày còn</span></div>
+          <div class="spine late" style="flex:5 0 9px;height:18px"><span class="tip">Bên kia sông, trễ 11 ngày</span></div>
+          <div class="spine" style="flex:9 0 16px;height:64px"><span class="tip">Chuyện của thiên tài, 11 ngày còn</span></div>
+          <div class="spine" style="flex:7 0 13px;height:44px"><span class="tip">Lề thơ, 8 ngày còn</span></div>
+          <div class="spine" style="flex:10 0 17px;height:78px"><span class="tip">Tôi thấy hoa vàng trên cỏ xanh, 13 ngày còn</span></div>
+          <div class="spine late" style="flex:6 0 12px;height:26px"><span class="tip">Sơn Tặng, trễ 4 ngày</span></div>
+          <div class="spine" style="flex:8 0 15px;height:58px"><span class="tip">Trên đường bộ trắng, 10 ngày còn</span></div>
+          <div class="spine" style="flex:7 0 13px;height:38px"><span class="tip">Mùa hạ rời đi, 7 ngày còn</span></div>
+        </div>
+        <div class="shelf-foot">
+          <span class="key"><i></i> Còn hạn</span>
+          <span class="key"><i class="late"></i> Trễ hạn</span>
+          <span style="margin-left:auto;color:var(--foxing)">Khoang 3, tầng 2</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- COUNTS -->
+    <section class="section">
+      <div class="counts">
+        <div><span class="n">1.284</span><span class="label">đầu sách trong kho</span></div>
+        <div><span class="n">37</span><span class="label">đang cho mượn</span></div>
+        <div><span class="n alert">12</span><span class="label">quá hạn</span></div>
+      </div>
+    </section>
+
+    <!-- RECENT -->
+    <section class="section">
+      <div class="section-title">
+        <h2>Trả gần đây</h2>
+        <span class="line"></span>
+        <span class="count">8 phiếu</span>
+      </div>
+      <div class="rows">
+        <div class="row">
+          <span class="no code">1913.D</span>
+          <span class="title">Nhà giả kim</span>
+          <span class="who">Trần Minh Quân</span>
+          <span class="when">2 giờ trước</span>
+        </div>
+        <div class="row">
+          <span class="no code">2001.A</span>
+          <span class="title">Vườn thu</span>
+          <span class="who">Lê Thu Hà</span>
+          <span class="when">Hôm qua, 16:20</span>
+        </div>
+        <div class="row">
+          <span class="no code">8432.B</span>
+          <span class="title">Bên kia sông</span>
+          <span class="who">Phạm Anh Khoa</span>
+          <span class="when">Hôm qua, 11:05</span>
+        </div>
+        <div class="row">
+          <span class="no code">1556.C</span>
+          <span class="title">Sơn Tặng</span>
+          <span class="who">Vũ Mai Chi</span>
+          <span class="when">12/11 lúc 09:48</span>
+        </div>
+        <div class="row">
+          <span class="no code">7412.F</span>
+          <span class="title">Tôi thấy hoa vàng trên cỏ xanh</span>
+          <span class="who">Hoàng Gia Bảo</span>
+          <span class="when">12/11 lúc 14:33</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TASKS -->
+    <section class="section">
+      <div class="section-title">
+        <h2>Cần xử lý</h2>
+        <span class="line"></span>
+        <span class="count">4 việc</span>
+      </div>
+      <div class="rows">
+        <div class="row task">
+          <span class="no code">—</span>
+          <span class="title">2 phiếu mượn quá hạn cần gọi hội viên</span>
+          <span class="status late"><i></i>Trễ hạn</span>
+        </div>
+        <div class="row task">
+          <span class="no code">—</span>
+          <span class="title">Hội viên Nguyễn Thị Lan: thẻ hết hạn 30/11</span>
+          <span class="status late"><i></i>Gia hạn</span>
+        </div>
+        <div class="row task">
+          <span class="no code">—</span>
+          <span class="title">14 bản sách chưa kiểm kê lần cuối</span>
+          <span class="status out"><i></i>Kiểm kê</span>
+        </div>
+        <div class="row task">
+          <span class="no code">—</span>
+          <span class="title">Đơn đặt trước: 3 sách đang chờ lấy</span>
+          <span class="status"><i></i>Chờ lấy</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- RIGHT SLIP -->
+  <aside class="slip">
+    <div class="slip-group">
+      <h2>Phiếu đến hạn</h2>
+      <div class="when-label">Hôm nay, 6 phiếu</div>
+      <div class="slip-row">
+        <span class="t">Nhà giả kim</span>
+        <span class="m code">1913.D, Trần Minh Quân</span>
+      </div>
+      <div class="slip-row">
+        <span class="t">Bên kia sông</span>
+        <span class="m code">8432.B, Phạm Anh Khoa</span>
+      </div>
+      <div class="slip-row">
+        <span class="t">Chuyện của thiên tài</span>
+        <span class="m code">4471.E, Đỗ Thu Trang</span>
+      </div>
+    </div>
+
+    <div class="slip-group">
+      <h2>Đã trễ hạn</h2>
+      <div class="when-label">Cần liên hệ hội viên</div>
+      <div class="slip-row late">
+        <span class="stamp-block">TRỄ 11 NGÀY</span>
+        <span class="t">Bên kia sông</span>
+        <span class="m code">8432.B, Nguyễn Văn Hùng</span>
+      </div>
+      <div class="slip-row late">
+        <span class="stamp-block">TRỄ 6 NGÀY</span>
+        <span class="t">Nhà giả kim</span>
+        <span class="m code">1913.D, Lê Thị Ngọc</span>
+      </div>
+      <div class="slip-row late">
+        <span class="stamp-block">TRỄ 4 NGÀY</span>
+        <span class="t">Sơn Tặng</span>
+        <span class="m code">1556.C, Trịnh Quốc Bảo</span>
+      </div>
+    </div>
+
+    <button class="btn quiet" style="width:100%">Xem tất cả phiếu mượn</button>
+  </aside>
+</div>
+
+</body>
+</html>
